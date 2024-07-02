@@ -21,7 +21,7 @@ class _LoginSignupCardState extends State<LoginSignupCard> {
     var orientation = MediaQuery.of(context).orientation;
 
     return Container(
-      height: orientation == Orientation.portrait ? size.height * 0.50 : size.height * 0.30,
+      height: orientation == Orientation.portrait ? size.height * 0.45 : size.height * 0.30,
       width: size.width,
       child: SingleChildScrollView(
         child: Column(

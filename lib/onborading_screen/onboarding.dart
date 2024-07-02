@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/loginsignup/loginpage.dart';
+import 'package:ecommerceapp/pages/loginpage.dart';
 import 'package:ecommerceapp/widgets/onboarding_card.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

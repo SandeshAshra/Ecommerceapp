@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'onborading_screen/onboarding.dart';
 
 void main() {
@@ -12,9 +13,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromRGBO(0, 16, 247, 1)),
+        colorSchemeSeed: const Color.fromARGB(
+          255,
+          251,
+          48,
+          82,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          color: Colors.transparent,
+        ),
         useMaterial3: true,
+        textTheme: GoogleFonts.lexendTextTheme(),
       ),
       home: const OnBoardingScreen(),
     );

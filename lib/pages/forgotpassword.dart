@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/utils/extension.dart';
 import 'package:ecommerceapp/widgets/custombutton.dart';
 import 'package:ecommerceapp/widgets/loginsignupcard.dart';
 import 'package:ecommerceapp/widgets/textformfield.dart';
@@ -18,8 +19,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0.0,
       ),
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -32,13 +33,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   title: "Forgot your password?",
                   description: "Please confirm your email and we will send you a verification code.",
                 ),
+                SizedBox(height: size.height * 0.02),
                 CustomTextFormField(
                   hintText: 'Enter your email',
                   icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email or username';
+                    if (!value!.isValidEmail) {
+                      return 'Please enter vaild email';
                     }
                     return null;
                   },
