@@ -19,6 +19,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final List<int> shoeSizes = [6, 7, 8, 9, 10, 11, 12];
   int selectedIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

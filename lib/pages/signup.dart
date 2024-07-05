@@ -89,7 +89,7 @@ class _SignupPageState extends State<SignupPage> {
                   textColor: Colors.white,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: size.height * 0.02 ),
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,22 +97,25 @@ class _SignupPageState extends State<SignupPage> {
                       Text(
                         "Already have an account?",
                         style: TextStyle(
-                          fontSize: orientation == Orientation.portrait ? 16 : 14,
+                          fontSize:
+                              orientation == Orientation.portrait ? 16 : 14,
                         ),
                       ),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
-                            context, MaterialPageRoute(
-                              builder: (context) => const LoginPage()),);
-        
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()),
+                          );
                         },
                         child: Text(
                           " Login ",
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: orientation == Orientation.portrait ? 16 : 14,
+                            fontSize:
+                                orientation == Orientation.portrait ? 16 : 14,
                           ),
                         ),
                       ),
