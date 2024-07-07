@@ -1,11 +1,13 @@
 import 'package:ecommerceapp/brandsdata.dart';
 import 'package:ecommerceapp/pages/homescreen/productcard.dart';
+import 'package:ecommerceapp/providers/homescreen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/models/brand.dart';
 import 'package:ecommerceapp/models/product.dart';
 import 'package:ecommerceapp/pages/homescreen/cart_screen.dart';
 import 'package:ecommerceapp/widgets/brandbutton.dart';
 import 'package:ecommerceapp/widgets/productcard.dart';
+import 'package:provider/provider.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 import 'user_profile.dart';
 import 'notification_screen.dart';
@@ -18,13 +20,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int selectedIndex1 = 0;
   late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: selectedIndex1);
+    _pageController = PageController(
+        initialPage: Provider.of<HomepageProvider>(context, listen: false)
+            .selectedindex);
   }
 
   @override
@@ -34,88 +37,82 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> pages = [
-    HomeScreen(),
-    CartScreen(),
-    NotificationScreen(),
-    UserProfile(),
+    const HomeScreen(),
+    const CartScreen(),
+    const NotificationScreen(),
+    const UserProfile(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            selectedIndex1 = index;
-          });
+      body: Consumer<HomepageProvider>(
+        builder: (context, provider, child) {
+          return PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              provider.updateSelectedIndex(index);
+            },
+            children: pages,
+          );
         },
-        children: pages,
       ),
       bottomNavigationBar: _bottomNavigationBar(context),
     );
   }
 
   Widget _bottomNavigationBar(BuildContext context) {
-    return WaterDropNavBar(
-      backgroundColor: Colors.white,
-      bottomPadding: MediaQuery.of(context).size.height * 0.02,
-      waterDropColor: Theme.of(context).colorScheme.primary,
-      selectedIndex: selectedIndex1,
-      onItemSelected: (index) {
-        setState(() {
-          selectedIndex1 = index;
-        });
-        _pageController.jumpToPage(index);
+    return Consumer<HomepageProvider>(
+      builder: (context, provider, child) {
+        return WaterDropNavBar(
+          backgroundColor: Colors.white,
+          bottomPadding: MediaQuery.of(context).size.height * 0.02,
+          waterDropColor: Theme.of(context).colorScheme.primary,
+          selectedIndex: provider.selectedindex,
+          onItemSelected: (index) {
+            provider.updateSelectedIndex(index);
+            _pageController.jumpToPage(index);
+          },
+          barItems: [
+            BarItem(
+              filledIcon: Icons.home,
+              outlinedIcon: Icons.home_outlined,
+            ),
+            BarItem(
+              filledIcon: Icons.shopping_bag,
+              outlinedIcon: Icons.shopping_bag_outlined,
+            ),
+            BarItem(
+              filledIcon: Icons.notifications,
+              outlinedIcon: Icons.notifications_outlined,
+            ),
+            BarItem(
+              filledIcon: Icons.person,
+              outlinedIcon: Icons.person_outline,
+            ),
+          ],
+        );
       },
-      barItems: [
-        BarItem(
-          filledIcon: Icons.home,
-          outlinedIcon: Icons.home_outlined,
-        ),
-        BarItem(
-          filledIcon: Icons.shopping_bag,
-          outlinedIcon: Icons.shopping_bag_outlined,
-        ),
-        BarItem(
-          filledIcon: Icons.notifications,
-          outlinedIcon: Icons.notifications_outlined,
-        ),
-        BarItem(
-          filledIcon: Icons.person,
-          outlinedIcon: Icons.person_outline,
-        ),
-      ],
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
-  List<Product> filteredProducts = [];
-
   @override
   void initState() {
     super.initState();
-    filterProductsByBrand(selectedIndex);
-  }
-
-  void filterProductsByBrand(int index) {
-    setState(() {
-      selectedIndex = index;
-      if (index == 0) {
-        // "All" category
-        filteredProducts = products;
-      } else {
-        // Specific brand
-        filteredProducts = products.where((product) => product.brand == brands[selectedIndex].name).toList();
-      }
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final selectedIndex =
+          Provider.of<HomepageProvider>(context, listen: false).selectedindex1;
+      Provider.of<HomepageProvider>(context, listen: false)
+          .filterProductsByBrand(selectedIndex);
     });
   }
 
@@ -225,59 +222,69 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _categoriesList(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.05,
-      margin: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.height * 0.01,
-      ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: brands.length,
-        itemBuilder: (context, index) {
-          Brand brand = brands[index];
-          return GestureDetector(
-            onTap: () {
-              filterProductsByBrand(index);
+    return Consumer<HomepageProvider>(
+      builder: (context, provider, child) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.05,
+          margin: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height * 0.01,
+          ),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: brands.length,
+            itemBuilder: (context, index) {
+              Brand brand = brands[index];
+              return GestureDetector(
+                onTap: () {
+                  provider.updateSelectedIndex1(index);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: BrandButton(
+                      brand: brand,
+                      isSelected: provider.selectedindex1 == index),
+                ),
+              );
             },
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: BrandButton(brand: brand, isSelected: selectedIndex == index),
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
   Widget _productsGrid(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-        ),
-        itemCount: filteredProducts.length,
-        itemBuilder: (context, index) {
-          Product product = filteredProducts[index];
-          return ProductCard(
-            product: product,
-            margin: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.02,
-              vertical: MediaQuery.of(context).size.height * 0.02,
+    return Consumer<HomepageProvider>(
+      builder: (context, provider, child) {
+        return Expanded(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.75,
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return ProductPage(product: product);
-                  },
+            itemCount: provider.filteredProducts.length,
+            itemBuilder: (context, index) {
+              Product product = provider.filteredProducts[index];
+              return ProductCard(
+                product: product,
+                margin: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.02,
+                  vertical: MediaQuery.of(context).size.height * 0.02,
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ProductPage(product: product);
+                      },
+                    ),
+                  );
+                },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

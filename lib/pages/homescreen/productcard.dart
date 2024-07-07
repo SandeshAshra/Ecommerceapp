@@ -1,8 +1,9 @@
 import 'package:ecommerceapp/models/product.dart';
+import 'package:ecommerceapp/providers/productcard_provider.dart';
 import 'package:ecommerceapp/widgets/addbutton.dart';
 import 'package:ecommerceapp/widgets/size_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
   final Product product;
@@ -18,7 +19,6 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final List<int> shoeSizes = [6, 7, 8, 9, 10, 11, 12];
-  int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -187,20 +187,22 @@ class _ProductPageState extends State<ProductPage> {
         ),
         Container(
           height: MediaQuery.sizeOf(context).height * 0.03,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: shoeSizes.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                  });
+          child: Consumer<ProductcardProvider>(
+            builder: (context, productCardProvider, child) {
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: shoeSizes.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      productCardProvider.updateSelectedIndex(index);
+                    },
+                    child: SizeButton(
+                      size: shoeSizes[index],
+                      isSelected: productCardProvider.selectedindex == index,
+                    ),
+                  );
                 },
-                child: SizeButton(
-                  size: shoeSizes[index],
-                  isSelected: selectedIndex == index,
-                ),
               );
             },
           ),

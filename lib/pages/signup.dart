@@ -32,8 +32,28 @@ class _SignupPageState extends State<SignupPage> {
                   description: "Enter your email and password",
                 ),
                 CustomTextFormField(
-                  hintText: 'Enter your Username',
+                  hintText: 'Enter a username',
                   icon: Icons.person,
+                  obscureText: false,
+                  validator: (value) {
+                    return null;
+                  },
+                ),
+                CustomTextFormField(
+                  hintText: 'Enter your email',
+                  icon: Icons.email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (!value!.isValidEmail) {
+                      return 'Please enter vaild email';
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextFormField(
+                  hintText: 'Enter your password',
+                  icon: Icons.lock,
+                  obscureText: true,
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -53,28 +73,6 @@ class _SignupPageState extends State<SignupPage> {
                     }
                     if (!RegExp(r"(?=.*?[#?!@$%^&*-])").hasMatch(value)) {
                       return 'Password must have at least one special character';
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextFormField(
-                  hintText: 'Email or Username',
-                  icon: Icons.email,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (!value!.isValidEmail) {
-                      return 'Please enter vaild email';
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextFormField(
-                  hintText: 'Password',
-                  icon: Icons.lock,
-                  obscureText: true,
-                  validator: (value) {
-                    if (!value!.isValidPassword) {
-                      return 'Please enter vaild password';
                     }
                     return null;
                   },

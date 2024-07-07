@@ -44,6 +44,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     }
                     return null;
                   },
+                  obscureText: false,
                 ),
                 SizedBox(height: size.height * 0.02),
                 CustomButton(

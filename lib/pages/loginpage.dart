@@ -1,11 +1,11 @@
 import 'package:ecommerceapp/pages/forgotpassword.dart';
 import 'package:ecommerceapp/pages/homescreen/homepage.dart';
+import 'package:ecommerceapp/pages/signup.dart';
 import 'package:ecommerceapp/utils/extension.dart';
-import 'package:flutter/material.dart';
 import 'package:ecommerceapp/widgets/custombutton.dart';
 import 'package:ecommerceapp/widgets/loginsignupcard.dart';
 import 'package:ecommerceapp/widgets/textformfield.dart';
-import 'signup.dart';
+import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -43,10 +43,11 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (!value!.isValidEmail) {
-                        return 'Please enter vaild email';
+                        return 'Please enter a valid email';
                       }
                       return null;
                     },
+                    obscureText: false, // Email field doesn't need obscuring
                   ),
                   CustomTextFormField(
                     hintText: 'Password',
@@ -73,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
+                    // isObscure and toggleVisibility are managed by Textformprovider
                   ),
                   Align(
                     alignment: Alignment.centerRight,
@@ -93,15 +95,15 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       if (_formkey.currentState!.validate()) {
                         var snackBar = SnackBar(
-                          content: Text('Loged in SucessFully'),
+                          content: const Text('Logged in Successfully'),
                           backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.primary,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                                builder: (context) => const HomePage()));
                       }
                       // Implement login logic
                     },
@@ -117,8 +119,9 @@ class _LoginPageState extends State<LoginPage> {
                         Text(
                           "Don't have an account?",
                           style: TextStyle(
-                            fontSize:
-                                orientation == Orientation.portrait ? 16 : 14,
+                            fontSize: orientation == Orientation.portrait
+                                ? 16
+                                : 14,
                           ),
                         ),
                         InkWell(
@@ -134,8 +137,9 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize:
-                                  orientation == Orientation.portrait ? 16 : 14,
+                              fontSize: orientation == Orientation.portrait
+                                  ? 16
+                                  : 14,
                             ),
                           ),
                         ),
